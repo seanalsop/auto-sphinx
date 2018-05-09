@@ -4,9 +4,14 @@
 
 # This shell script will auto generate sphinx documentation.
 # To generate entirely new documentation make sure that the 
-# directory contains only a directory of the code that is 
-# to be documented (hapi or hapi_tests), the sphinx-answers file
-# and this script. 
+# working directory contains only a directory containing the code 
+# that is to be documented (hapi or hapi_tests), the sphinx-answers 
+# file and this script. If this is what is required the directory 
+# should look like this: 
+
+	# [sean@eigg sphinx_hapi]$ ls
+	# acq400_hapi  auto-sphinx.sh  sphinx-answers
+
 
 # If documentation has already been created then this 
 # script can be used to generate new documentation without 
@@ -14,7 +19,7 @@
 # new html will be generated. Note that this will not change
 # the project name inside conf.py.
 
-# Terminal Example: ./auto-sphinx.sh 
+# Terminal Example: source auto-sphinx.sh 
 # No parameters are taken by this script. 
 
 
