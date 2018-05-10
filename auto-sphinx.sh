@@ -22,6 +22,8 @@
 # Terminal Example: source auto-sphinx.sh 
 # No parameters are taken by this script. 
 
+SDIR=$(dirname $0)
+ANS=$SDIR/sphinx-answers
 
 find_hapi_dirs()
 {
@@ -29,10 +31,10 @@ find_hapi_dirs()
 # from and checks if a hapi or hapi_tests directory exists.
 # If both hapi and hapi_tests exist then it will choose hapi by default 
 if [ -d "./acq400_hapi" ]; then
-	sed -i '3s/.*/acq400_hapi/' ./sphinx-answers
+	sed '3s/.*/acq400_hapi/' $ANS > $ANS.active
 	docs_name="acq400_hapi"
 elif [ -d "./acq400_hapi_tests" ]; then
-	sed -i '3s/.*/acq400_hapi_tests/' ./sphinx-answers
+	sed '3s/.*/acq400_hapi_tests/' $ANS > $ANS.active
 	docs_name="acq400_hapi_tests"
 fi
 }
@@ -47,7 +49,7 @@ if [ -f "conf.py" ]; then
 	echo "Sphinx conf found. Skipping sphinx-quickstart."
 else
 	echo "Sphinx conf not found. Running sphinx-quickstart now!"
-	sphinx-quickstart < sphinx-answers
+	sphinx-quickstart < $ANS.active
 fi
 }
 
