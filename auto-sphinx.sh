@@ -11,7 +11,8 @@
 
 	# [sean@eigg sphinx_hapi]$ ls
 	# acq400_hapi  auto-sphinx.sh  sphinx-answers
-
+        # This works, but be careful: 
+        # ls | grep -v hapi | grep -v auto-sphinx.sh | grep -v sphinx-answers | xargs rm -rf
 
 # If documentation has already been created then this 
 # script can be used to generate new documentation without 
@@ -33,9 +34,9 @@ find_hapi_dirs()
 if [ -d "./acq400_hapi" ]; then
 	sed '3s/.*/acq400_hapi/' $ANS > $ANS.active
 	docs_name="acq400_hapi"
-elif [ -d "./acq400_hapi_tests" ]; then
-	sed '3s/.*/acq400_hapi_tests/' $ANS > $ANS.active
-	docs_name="acq400_hapi_tests"
+elif [ -d "./user_apps" ]; then
+	sed '3s/.*/user_apps/' $ANS > $ANS.active
+	docs_name="user_apps"
 fi
 }
 
@@ -73,21 +74,51 @@ sed -i -e 's/alabaster/default/g' ./conf.py
 sed -i -e 's/# import os/import os/g' ./conf.py
 sed -i -e 's/# import sys/import sys/g' ./conf.py
 
-if [ -d "./acq400_hapi_tests" ]; then
-    sed -i -e 's:# sys.path.insert(0, os.path.abspath('"'"'.'"'"')):sys.path.insert(0, os.path.abspath('"'"''$current_dir'/acq400_hapi_tests'"'"')):g' ./conf.py
+if [ -d "./user_apps" ]; then
+    echo "Hello world"
+#    sed -i -e 's|# sys.path.insert(0, os.path.abspath('"'"'.'"'"'))|sys.path.insert(0, os.path.abspath('"'"''$current_dir'/user_apps'"'"'))|g' ./conf.py
+    sed -i -e 's|# sys.path.insert(0, os.path.abspath('"'"'.'"'"'))|for path in [x[0] for x in os.walk("'$current_dir'/user_apps/")]: sys.path.insert(0, path)|g' ./conf.py
 fi
 
 if [ -d "./acq400_hapi" ]; then
-    sed -i -e 's:# sys.path.insert(0, os.path.abspath('"'"'.'"'"')):sys.path.insert(0, os.path.abspath('"'"''$current_dir'/acq400_hapi'"'"')):g' ./conf.py
+    #sed -i -e 's:# sys.path.insert(0, os.path.abspath('"'"'.'"'"')):sys.path.insert(0, os.path.abspath('"'"''$current_dir'/acq400_hapi/acq400_hapi/'"'"')):g' ./conf.py
+ #   sed -i -e 's:# sys.path.insert(0, os.path.abspath('"'"'.'"'"')):sys.path.insert(0, os.path.abspath('"'"''$current_dir'/acq400_hapi/user_apps/acq400/'"'"')):g' ./conf.py
+    echo "Debug"
 fi
 
 make html
-sphinx-apidoc -o ./rst ./$docs_name
+#sphinx-apidoc -e -o ./rst/acq400 ./$docs_name/acq400 
+#sphinx-apidoc -e -o ./rst/acq1001 ./$docs_name/acq1001 
+#sphinx-apidoc -e -o ./rst/acq2106 ./$docs_name/acq2106 
+#sphinx-apidoc -e -o ./rst/acq1014 ./$docs_name/acq1014 
+#sphinx-apidoc -e -o ./rst/special ./$docs_name/special 
+#sphinx-apidoc -e -o ./rst/analysis ./$docs_name/analysis 
+#sphinx-apidoc -e -o ./rst/hil ./$docs_name/hil 
+#sphinx-apidoc -e -o ./rst/utils ./$docs_name/utils
+sphinx-apidoc -o ./rst/ ./$docs_name/acq400
+cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
+sphinx-apidoc -o ./rst/ ./$docs_name/acq1001
+cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
+sphinx-apidoc -o ./rst/ ./$docs_name/acq2106 
+cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
+sphinx-apidoc -o ./rst/ ./$docs_name/acq1014
+cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
+sphinx-apidoc -o ./rst/ ./$docs_name/special
+cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
+sphinx-apidoc -o ./rst/ ./$docs_name/analysis
+cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
+sphinx-apidoc -o ./rst/ ./$docs_name/hil
+cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
+sphinx-apidoc -o ./rst/ ./$docs_name/utils
+cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
+
 cd rst
-cp modules.rst index.rst
+cat */modules.rst >> index.rst
+#cp modules.rst index.rst
 cp ../conf.py .
 mkdir _static
 cd ..
+echo "sphinx-build"
 sphinx-build -b html ./rst ./html
 
 echo ""
