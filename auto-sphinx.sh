@@ -96,24 +96,24 @@ fi
 
 make html
 if [ "$which_docs_to_build" = "acq400_hapi" ]; then
-	sphinx-apidoc -o ./rst ./$docs_name
+	sphinx-apidoc -o ./rst ./acq400_hapi/$docs_name/acq400_hapi
 	cp rst/modules.rst rst/index.rst
 elif [ "$which_docs_to_build" = "user_apps" ]; then
-	sphinx-apidoc -o ./rst/ ./$docs_name/acq400
+	sphinx-apidoc -o ./rst/ ./acq400_hapi/$docs_name/acq400
 	cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
-	sphinx-apidoc -o ./rst/ ./$docs_name/acq1001
+	sphinx-apidoc -o ./rst/ ./acq400_hapi/$docs_name/acq1001
 	cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
-	sphinx-apidoc -o ./rst/ ./$docs_name/acq2106
+	sphinx-apidoc -o ./rst/ ./acq400_hapi/$docs_name/acq2106
 	cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
-	sphinx-apidoc -o ./rst/ ./$docs_name/acq1014
+	sphinx-apidoc -o ./rst/ ./acq400_hapi/$docs_name/acq1014
 	cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
-	sphinx-apidoc -o ./rst/ ./$docs_name/special
+	sphinx-apidoc -o ./rst/ ./acq400_hapi/$docs_name/special
 	cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
-	sphinx-apidoc -o ./rst/ ./$docs_name/analysis
+	sphinx-apidoc -o ./rst/ ./acq400_hapi/$docs_name/analysis
 	cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
-	sphinx-apidoc -o ./rst/ ./$docs_name/hil
+	sphinx-apidoc -o ./rst/ ./acq400_hapi/$docs_name/hil
 	cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
-	sphinx-apidoc -o ./rst/ ./$docs_name/utils
+	sphinx-apidoc -o ./rst/ ./acq400_hapi/$docs_name/utils
 	cat ./rst/modules.rst >> ./rst/index.rst; rm ./rst/modules.rst
 fi
 
@@ -130,6 +130,7 @@ echo ""
 
 
 current_dir=`pwd`
+export PYTHONPATH=$current_dir/acq400_hapi/
 
 find_hapi_dirs
 
